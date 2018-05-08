@@ -1,2 +1,3 @@
 # skipview
-![image](https://github.com/pengjiaqii/Rain/blob/master/NumRain/preview.gif)
+splash界面的跳过按钮
+![image](https://github.com/pengjiaqii/skipview/blob/master/skipview.gif)
