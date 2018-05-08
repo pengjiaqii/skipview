@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/jade/skipview/MainActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/jade/skipview/MainActivity.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/jade/skipview/OnSlideListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/jade/skipview/SkipView.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/jade/skipview/SlideButton.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/jade/skipview/TwoActivity.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/background.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/slide_button.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_two.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values-w820dp" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml" charset="GBK" />
+  </component>
+</project>
