@@ -1,4 +1,4 @@
-package com.jade.skipview;
+package com.jade.testdemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

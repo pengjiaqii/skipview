@@ -1,4 +1,4 @@
-package com.jade.skipview;
+package com.jade.testdemo;
 
 import org.junit.Test;
 
