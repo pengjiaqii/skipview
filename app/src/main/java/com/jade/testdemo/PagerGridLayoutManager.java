@@ -1,4 +1,3 @@
-
 package com.jade.testdemo;
 
 import android.annotation.SuppressLint;
@@ -368,7 +367,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
             offsetY += row * mItemHeight;
 
             // 状态输出，用于调试
-            Log.d("shay", "pagePos = " + pagePos);
+            Log.d("shay", "第几页 = " + pagePos);
             Log.d("shay", "行 = " + row);
             Log.d("shay", "列 = " + col);
 

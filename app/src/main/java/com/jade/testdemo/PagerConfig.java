@@ -1,5 +1,3 @@
-
-
 package com.jade.testdemo;
 
 import android.util.Log;
