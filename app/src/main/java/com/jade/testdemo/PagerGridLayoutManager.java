@@ -144,6 +144,9 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
         mWidthUsed = getUsableWidth() - mItemWidth;
         mHeightUsed = getUsableHeight() - mItemHeight;
 
+        Log.w("shay", "mWidthUsed = " + mWidthUsed);
+        Log.w("shay", "mHeightUsed = " + mHeightUsed);
+
         // 预存储两页的View显示区域
         for (int i = 0; i < mOnePageSize * 2; i++) {
             getItemFrameByPosition(i);

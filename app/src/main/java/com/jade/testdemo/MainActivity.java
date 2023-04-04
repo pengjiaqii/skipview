@@ -21,7 +21,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
     private PagerGridLayoutManager mLayoutManager;
-//    private RadioGroup mRadioGroup;
+    //    private RadioGroup mRadioGroup;
     private TextView mPageTotal;        // 总页数
     private TextView mPageCurrent;      // 当前页数
 
@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
     public void addMore(View view) {
         List<String> data = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            data.add("加五个"+i);
+            data.add("加五个" + i);
         }
         mAdapter.data.addAll(data);
         mAdapter.notifyDataSetChanged();
