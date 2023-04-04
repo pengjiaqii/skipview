@@ -26,8 +26,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFBE6"
-    android:orientation="vertical"
-    tools:context="com.gcssloop.pagelayoutmanager.MainActivity">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,15 +40,46 @@
 
     </RelativeLayout>
 
-    <View
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#221510" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_hotseat_bg">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_app_camera" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_app_camera" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_app_camera" />
+
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/page_total"
@@ -60,11 +90,6 @@
             android:text="共 100 页"
             android:textColor="#221510"
             android:textSize="18sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="24dp"
-            android:background="#221510" />
 
         <TextView
             android:id="@+id/page_current"
@@ -77,20 +102,12 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#221510" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#221510" />
 
         <LinearLayout
             android:layout_width="match_parent"
