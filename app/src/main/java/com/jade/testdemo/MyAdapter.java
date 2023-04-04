@@ -21,16 +21,15 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private View mHeadView;
     private int TYPE_HEADER = 1001;
 
+    int[] iconBgRes = {R.drawable.icon_orange_bg, R.drawable.icon_green_bg, R.drawable.icon_blue_bg,
+            R.drawable.icon_red_bg, R.drawable.icon_purple_bg, R.drawable.icon_cblue_bg};
+
+
     static {
         for (int i = 1; i <= 15; i++) {
             data.add(i + "");
         }
-    }
-
-
-    //头部的set方法
-    public void setHeadView(View headView) {
-        mHeadView = headView;
+        data.add(0, "xxx");
     }
 
 
@@ -49,18 +48,35 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+
         if (holder instanceof HeaderViewHolder) {
+            Log.d("Adapter", "onBindViewHolder---HeaderViewHolder--->" + holder);
+            Log.d("Adapter", "onBindViewHolder---position--->" + position);
 
         } else if (holder instanceof MyViewHolder) {
+            Log.d("Adapter", "onBindViewHolder---MyViewHolder--->" + holder);
+            Log.d("Adapter", "onBindViewHolder---position--->" + position);
             final MyViewHolder myViewHolder = (MyViewHolder) holder;
             final String title = data.get(position - 1);
             myViewHolder.tv_title.setText(title);
+            int iconIndex = position % 6;
+            Log.d("Adapter", "onBindViewHolder---第几张图--iconIndex->" + iconIndex);
+
+            myViewHolder.itemView.setBackgroundResource(iconBgRes[iconIndex]);
+
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "item" + title + " 被点击了", Toast.LENGTH_SHORT).show();
-                    myViewHolder.tv_title.setText("G " + title);
-                    notifyItemChanged(position);
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "item" + position + " 被点击了", Toast.LENGTH_SHORT).show();
+//                    myViewHolder.tv_title.setText("G " + position);
+//                    notifyItemChanged(position);
+                }
+            });
+            myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Toast.makeText(view.getContext(), "item" + position + " 长按了", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             });
         }
