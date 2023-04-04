@@ -345,6 +345,9 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      */
     private Rect getItemFrameByPosition(int pos) {
         Rect rect = mItemFrames.get(pos);
+        if(pos == 0){
+            return new Rect(0,0,100,100);
+        }
         if (null == rect) {
             rect = new Rect();
             // 计算显示区域 Rect

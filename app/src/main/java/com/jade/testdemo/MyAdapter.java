@@ -2,9 +2,12 @@ package com.jade.testdemo;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,8 +85,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * 头布局的viewholder
      */
     class HeaderViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout rv_header;
+
         public HeaderViewHolder(View itemView) {
             super(itemView);
+            rv_header = (RelativeLayout) itemView.findViewById(R.id.rv_header);
         }
     }
 
