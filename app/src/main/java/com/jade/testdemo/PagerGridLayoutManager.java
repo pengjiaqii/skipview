@@ -148,9 +148,9 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
         Log.w("shay", "mHeightUsed = " + mHeightUsed);
 
         // 预存储两页的View显示区域
-        for (int i = 0; i < mOnePageSize * 2; i++) {
-            getItemFrameByPosition(i);
-        }
+//        for (int i = 0; i < mOnePageSize * 2; i++) {
+//            getItemFrameByPosition(i);
+//        }
 
         if (mOffsetX == 0 && mOffsetY == 0) {
             // 预存储View
@@ -345,8 +345,13 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      */
     private Rect getItemFrameByPosition(int pos) {
         Rect rect = mItemFrames.get(pos);
-        if(pos == 0){
-            return new Rect(0,0,100,100);
+        if (pos == 0) {
+            //要第一个位置横向占两格，也就是头布局横向占满，高度跟其他一致
+            return new Rect(0, 0, mItemWidth * 2, mItemHeight);
+        }
+        if (pos == 1) {
+            //把第二个位置空出来算了，以免全部要重新计算
+            return new Rect();
         }
         if (null == rect) {
             rect = new Rect();
