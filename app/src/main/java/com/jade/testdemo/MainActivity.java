@@ -68,7 +68,34 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
                 Log.d("shay", "registerAdapterDataObserver count = " + count);
             }
         });
+        mAdapter.setItemCallback(new LauncherListCallback() {
+            @Override
+            public void onItemClick() {
+
+            }
+
+            @Override
+            public void onItemLongClick() {
+                //显示所有删除按钮
+                mAdapter.setDeleteVisible(true);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onDeleteClick() {
+
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        if(mAdapter.ismDeleteVisible()){
+            mAdapter.setDeleteVisible(false);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

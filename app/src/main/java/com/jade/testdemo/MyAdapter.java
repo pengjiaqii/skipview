@@ -3,10 +3,10 @@ package com.jade.testdemo;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +18,15 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static List<String> data = new ArrayList<>();
-    private View mHeadView;
+
     private int TYPE_HEADER = 1001;
+
+    private LauncherListCallback mCallback;
+
+    private boolean mDeleteVisible = false;
 
     int[] iconBgRes = {R.drawable.icon_orange_bg, R.drawable.icon_green_bg, R.drawable.icon_blue_bg,
             R.drawable.icon_red_bg, R.drawable.icon_purple_bg, R.drawable.icon_cblue_bg};
-
 
     static {
         for (int i = 1; i <= 15; i++) {
@@ -32,6 +35,24 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         data.add(0, "xxx");
     }
 
+    /**
+     * 点击，长按事件的一些回调，可选用
+     * @param callback
+     */
+    public void setItemCallback(LauncherListCallback callback) {
+        mCallback = callback;
+    }
+
+    /**
+     * 设置删除按钮是否可见
+     */
+    public void setDeleteVisible(boolean deleteVisible) {
+        mDeleteVisible = deleteVisible;
+    }
+
+    public boolean ismDeleteVisible() {
+        return mDeleteVisible;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -42,7 +63,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new HeaderViewHolder(headerView);
         }
 
-        View view = inflater.inflate(R.layout.layout_item, parent, false);
+        View view = inflater.inflate(R.layout.launcher_rv_layout_item, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -59,14 +80,21 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final MyViewHolder myViewHolder = (MyViewHolder) holder;
             final String title = data.get(position - 1);
             myViewHolder.tv_title.setText(title);
+
             int iconIndex = position % 6;
             Log.d("Adapter", "onBindViewHolder---第几张图--iconIndex->" + iconIndex);
-
             myViewHolder.itemView.setBackgroundResource(iconBgRes[iconIndex]);
+
+            if(mDeleteVisible){
+                myViewHolder.delete_item.setVisibility(View.VISIBLE);
+            }else{
+                myViewHolder.delete_item.setVisibility(View.INVISIBLE);
+            }
 
             myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mCallback.onItemClick();
                     Toast.makeText(view.getContext(), "item" + position + " 被点击了", Toast.LENGTH_SHORT).show();
 //                    myViewHolder.tv_title.setText("G " + position);
 //                    notifyItemChanged(position);
@@ -75,8 +103,18 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    mCallback.onItemLongClick();
                     Toast.makeText(view.getContext(), "item" + position + " 长按了", Toast.LENGTH_SHORT).show();
                     return false;
+                }
+            });
+            myViewHolder.delete_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCallback.onDeleteClick();
+                    Toast.makeText(view.getContext(), "item" + position + " 删除了", Toast.LENGTH_SHORT).show();
+                    MyAdapter.this.data.remove(position - 1);
+                    MyAdapter.this.notifyDataSetChanged();
                 }
             });
         }
@@ -97,6 +135,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return data.size() + 1;
     }
 
+
     /**
      * 头布局的viewholder
      */
@@ -111,10 +150,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title;
+        ImageView delete_item;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
+            delete_item = (ImageView) itemView.findViewById(R.id.delete_item);
         }
     }
 }
