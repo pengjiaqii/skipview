@@ -16,7 +16,7 @@
         android:taskAffinity=""
         android:enabled="true"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Holo.NoActionBar">
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar">
         <activity android:name="com.jade.testdemo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

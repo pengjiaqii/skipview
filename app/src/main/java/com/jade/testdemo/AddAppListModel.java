@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteException;
 import android.graphics.drawable.Drawable;
 import android.content.Context;
 
+import com.jade.testdemo.util.AddAppListDB;
+
 public class AddAppListModel {
 
 	private String currentPackage;
@@ -18,54 +20,54 @@ public class AddAppListModel {
     private int currentIsChecked;
     private Drawable icon;
 
-//    private static AddAppListDB mDb;
-//
-//    public static ArrayList<AddAppListModel> getAllAppFromDB(Context context){
-//        mDb = new AddAppListDB(context);
-//
-//        ArrayList<AddAppListModel> addAppListModels = new ArrayList<>();
-//
-//        Cursor c = null;
-//        try {
-//            c = mDb.query(null,null,null);
-//
-//            final int columnPackage = c.getColumnIndex(AddAppListDB.COLUMN_PACKAGE);
-//            final int columnAppName = c.getColumnIndex(AddAppListDB.COLUMN_APP_NAME);
-//            final int columnClassName = c.getColumnIndex(AddAppListDB.COLUMN_CLASS_NAME);
-//            final int columnIsChecked = c.getColumnIndex(AddAppListDB.COLUMN_IS_CHECKED);
-//
-//            while (c.moveToNext()) {
-//                AddAppListModel model = new AddAppListModel();
-//
-//                String currentPackage = c.getString(columnPackage);
-//                String currentAppName = c.getString(columnAppName);
-//                String currentClassName = c.getString(columnClassName);
-//                int currentIsChecked = c.getInt(columnIsChecked);
-//
-//                Log.d("launcher3j06", "---getAllAppFromDB---currentPackage:" + currentPackage);
-//                Log.d("launcher3j06", "---getAllAppFromDB---currentAppName:" + currentAppName);
-//                Log.d("launcher3j06", "---getAllAppFromDB---currentClassName:" + currentClassName);
-//                Log.d("launcher3j06", "---getAllAppFromDB---currentIsChecked:" + currentIsChecked);
-//
-//                model.setCurrentPackage(currentPackage);
-//                model.setCurrentAppName(currentAppName);
-//                model.setCurrentClassName(currentClassName);
-//                model.setCurrentIsChecked(currentIsChecked);
-//
-//                addAppListModels.add(model);
-//            }
-//        } catch (SQLiteException e) {
-//            Log.d("launcher3j06", "Error reading AddAppListDB: "+ e);
-//            // Continue updating whatever we have read so far
-//        } finally {
-//            if (c != null) {
-//                c.close();
-//            }
-//        }
-//
-//        Log.d("launcher3j06", "AddAppListModel---addAppListModels:" + addAppListModels.size());
-//        return addAppListModels;
-//    }
+    private static AddAppListDB mDb;
+
+    public static ArrayList<AddAppListModel> getAllAppFromDB(Context context){
+        mDb = new AddAppListDB(context);
+
+        ArrayList<AddAppListModel> addAppListModels = new ArrayList<>();
+
+        Cursor c = null;
+        try {
+            c = mDb.getWritableDatabase().query(AddAppListDB.TABLE_NAME,null,null,null,null,null,null,null);
+
+            final int columnPackage = c.getColumnIndex(AddAppListDB.COLUMN_PACKAGE);
+            final int columnAppName = c.getColumnIndex(AddAppListDB.COLUMN_APP_NAME);
+            final int columnClassName = c.getColumnIndex(AddAppListDB.COLUMN_CLASS_NAME);
+            final int columnIsChecked = c.getColumnIndex(AddAppListDB.COLUMN_IS_CHECKED);
+
+            while (c.moveToNext()) {
+                AddAppListModel model = new AddAppListModel();
+
+                String currentPackage = c.getString(columnPackage);
+                String currentAppName = c.getString(columnAppName);
+                String currentClassName = c.getString(columnClassName);
+                int currentIsChecked = c.getInt(columnIsChecked);
+
+                Log.d("Shay", "---getAllAppFromDB---currentPackage:" + currentPackage);
+                Log.d("Shay", "---getAllAppFromDB---currentAppName:" + currentAppName);
+                Log.d("Shay", "---getAllAppFromDB---currentClassName:" + currentClassName);
+                Log.d("Shay", "---getAllAppFromDB---currentIsChecked:" + currentIsChecked);
+
+                model.setCurrentPackage(currentPackage);
+                model.setCurrentAppName(currentAppName);
+                model.setCurrentClassName(currentClassName);
+                model.setCurrentIsChecked(currentIsChecked);
+
+                addAppListModels.add(model);
+            }
+        } catch (SQLiteException e) {
+            Log.d("Shay", "Error reading AddAppListDB: "+ e);
+            // Continue updating whatever we have read so far
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        Log.d("Shay", "AddAppListModel---addAppListModels:" + addAppListModels.size());
+        return addAppListModels;
+    }
 
 
     public String getCurrentPackage() {

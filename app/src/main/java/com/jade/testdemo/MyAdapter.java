@@ -70,8 +70,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (holder instanceof MyViewHolder) {
             Log.d("MyAdapter", "onBindViewHolder---MyViewHolder--->" + holder);
             Log.d("MyAdapter", "onBindViewHolder---position--->" + position);
+            Log.d("MyAdapter", "onBindViewHolder---data--->" + data.size());
             final MyViewHolder myViewHolder = (MyViewHolder) holder;
             final AddAppListModel model = data.get(position - 1);
+            Log.d("MyAdapter", "onBindViewHolder---model--->" + model);
             myViewHolder.tv_title.setText(model.getCurrentAppName());
             myViewHolder.app_icon.setImageDrawable(model.getIcon());
 
