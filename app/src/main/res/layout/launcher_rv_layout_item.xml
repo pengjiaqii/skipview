@@ -17,6 +17,7 @@
         android:src="@drawable/ic_launcher_delete" />
 
     <ImageView
+        android:id="@+id/app_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -32,6 +33,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="12sp"
         tools:text="哈哈哈哈" />
 </RelativeLayout>

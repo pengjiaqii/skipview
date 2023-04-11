@@ -2,19 +2,31 @@ package com.jade.testdemo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.content.pm.LauncherApps;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity implements PagerGridLayoutManager
         .PageListener, RadioGroup.OnCheckedChangeListener {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private int mRows = 3;
     private int mColumns = 2;
@@ -28,12 +40,19 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
     private int mTotal = 0;
     private int mCurrent = 0;
 
+    protected LauncherApps mLauncherApps;
+    protected  UserManager mUserManager;
+    private  PackageManager mPm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("GCS", "onCreate");
+        Log.i(TAG, "onCreate");
 
+        mLauncherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
+        mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
+        mPm = getPackageManager();
 //        mRadioGroup = (RadioGroup) findViewById(R.id.orientation_type);
 //        mRadioGroup.setOnCheckedChangeListener(this);
 
@@ -65,13 +84,20 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
             public void onChanged() {
                 super.onChanged();
                 int count = mAdapter.getItemCount();
-                Log.d("shay", "registerAdapterDataObserver count = " + count);
+                Log.d(TAG, "registerAdapterDataObserver count = " + count);
             }
         });
         mAdapter.setItemCallback(new LauncherListCallback() {
             @Override
-            public void onItemClick() {
-
+            public void onItemClick(int position) {
+                AddAppListModel model = mAdapter.data.get(position-1);
+                Log.d(TAG, "点击 model = " + model.getCurrentPackage());
+                Log.d(TAG, "点击 model = " + model.getCurrentClassName());
+                ComponentName component = new ComponentName(model.getCurrentPackage(), model.getCurrentClassName());
+                Intent intent = new Intent();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setComponent(component);
+                startActivity(intent);
             }
 
             @Override
@@ -87,12 +113,41 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
             }
         });
         mRecyclerView.setAdapter(mAdapter);
+
+        getAllActivity();
+    }
+
+
+    private void getAllActivity(){
+        final List<UserHandle> profiles = mUserManager.getUserProfiles();
+        for (UserHandle user : profiles) {
+            final List<LauncherActivityInfo> apps = mLauncherApps.getActivityList(null, user);
+            ArrayList<AddAppListModel> models = new ArrayList<>();
+            synchronized (this) {
+                for (LauncherActivityInfo app : apps) {
+                    Log.d(TAG, "verifyApplications---LauncherActivityInfo---app.getLabel:" + app.getLabel());
+                    Log.d(TAG, "verifyApplications---LauncherActivityInfo---app.getPackageName:" + app.getComponentName().getPackageName());
+                    Log.d(TAG, "verifyApplications---LauncherActivityInfo---app.getClassName:" + app.getComponentName().getClassName());
+                    AddAppListModel model = new AddAppListModel();
+                    model.setCurrentAppName(app.getLabel().toString());
+                    Drawable appIcon = app.getIcon(DisplayMetrics.DENSITY_DEFAULT);
+                    model.setIcon(appIcon);
+                    String className = app.getComponentName().getClassName();
+                    model.setCurrentClassName(className);
+                    String packageName = app.getComponentName().getPackageName();
+                    model.setCurrentPackage(packageName);
+                    models.add(model);
+                }
+            }
+            mAdapter.data.addAll(models);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        if(mAdapter.ismDeleteVisible()){
+        if (mAdapter.ismDeleteVisible()) {
             mAdapter.setDeleteVisible(false);
             mAdapter.notifyDataSetChanged();
         }
@@ -118,8 +173,12 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
      * @param view
      */
     public void addOne(View view) {
-        List<String> data = new ArrayList<>();
-        data.add("加一个");
+        List<AddAppListModel> data = new ArrayList<>();
+
+        AddAppListModel model = new AddAppListModel();
+        model.setCurrentAppName("加一");
+        data.add(model);
+
         mAdapter.data.addAll(data);
         mAdapter.notifyDataSetChanged();
     }
@@ -142,10 +201,10 @@ public class MainActivity extends Activity implements PagerGridLayoutManager
      * @param view
      */
     public void addMore(View view) {
-        List<String> data = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            data.add("加五个" + i);
-        }
+        List<AddAppListModel> data = new ArrayList<>();
+//        for (int i = 1; i <= 5; i++) {
+//            data.add("加五个" + i);
+//        }
         mAdapter.data.addAll(data);
         mAdapter.notifyDataSetChanged();
     }
