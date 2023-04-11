@@ -44,10 +44,10 @@ public class AddAppListModel {
                 String currentClassName = c.getString(columnClassName);
                 int currentIsChecked = c.getInt(columnIsChecked);
 
-                Log.d("Shay", "---getAllAppFromDB---currentPackage:" + currentPackage);
-                Log.d("Shay", "---getAllAppFromDB---currentAppName:" + currentAppName);
-                Log.d("Shay", "---getAllAppFromDB---currentClassName:" + currentClassName);
-                Log.d("Shay", "---getAllAppFromDB---currentIsChecked:" + currentIsChecked);
+                Log.d("launcher692", "---getAllAppFromDB---currentPackage:" + currentPackage);
+                Log.d("launcher692", "---getAllAppFromDB---currentAppName:" + currentAppName);
+                Log.d("launcher692", "---getAllAppFromDB---currentClassName:" + currentClassName);
+                Log.d("launcher692", "---getAllAppFromDB---currentIsChecked:" + currentIsChecked);
 
                 model.setCurrentPackage(currentPackage);
                 model.setCurrentAppName(currentAppName);
@@ -57,7 +57,7 @@ public class AddAppListModel {
                 addAppListModels.add(model);
             }
         } catch (SQLiteException e) {
-            Log.d("Shay", "Error reading AddAppListDB: "+ e);
+            Log.d("launcher692", "Error reading AddAppListDB: "+ e);
             // Continue updating whatever we have read so far
         } finally {
             if (c != null) {
@@ -65,7 +65,7 @@ public class AddAppListModel {
             }
         }
 
-        Log.d("Shay", "AddAppListModel---addAppListModels:" + addAppListModels.size());
+        Log.d("launcher692", "AddAppListModel---addAppListModels:" + addAppListModels.size());
         return addAppListModels;
     }
 
