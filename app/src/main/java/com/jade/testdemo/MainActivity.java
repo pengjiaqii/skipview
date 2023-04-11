@@ -2,10 +2,12 @@ package com.jade.testdemo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
@@ -69,6 +71,14 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         mPageTotal = (TextView) findViewById(R.id.page_total);
         mPageCurrent = (TextView) findViewById(R.id.page_current);
 
+        //生成广播处理
+        ReloadReceiver receiver = new ReloadReceiver();
+        //实例化过滤器并设置要过滤的广播
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.android.launcher3j06.reload");
+        //注册广播
+        this.registerReceiver(receiver, intentFilter);
+
         initData();
 
         mLayoutManager = new PagerGridLayoutManager(mRows, mColumns, PagerGridLayoutManager.HORIZONTAL);
@@ -105,8 +115,11 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                 Log.d(TAG, "点击 model = " + model.getCurrentPackage());
                 Log.d(TAG, "点击 model = " + model.getCurrentClassName());
                 if (TextUtils.equals(model.getCurrentPackage(), "com.test.addapp")) {
-
-                }else{
+                    Intent intent = new Intent();
+                    intent.setClass(MainActivity.this,AppListActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
                     ComponentName component = new ComponentName(model.getCurrentPackage(), model.getCurrentClassName());
                     Intent intent = new Intent();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -134,6 +147,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
 
 
     private void getAllActivity() {
+        mLastDatas.clear();
         ArrayList<AddAppListModel> models = AddAppListModel.getAllAppFromDB(this);
         Log.d(TAG, "AppListActivity---initData---models:" + models.size());
 
@@ -186,6 +200,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         //================添加假应用==================//
         mLastDatas.add(addAppListModel);
         mLastDatas.add(0, new AddAppListModel());
+        mAdapter.data.clear();
         mAdapter.data.addAll(mLastDatas);
         mAdapter.notifyDataSetChanged();
     }
@@ -347,4 +362,16 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
             }
         }
     }
+
+
+    public class ReloadReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive---" + intent.getAction());
+            getAllActivity();
+        }
+    }
+
+
 }
