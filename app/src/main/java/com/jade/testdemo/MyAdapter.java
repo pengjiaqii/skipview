@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public static List<AddAppListModel> data = new ArrayList<>();
 
@@ -31,27 +31,28 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * 点击，长按事件的一些回调，可选用
+     *
      * @param callback
      */
-    public void setItemCallback(LauncherListCallback callback) {
+    public void setItemCallback(LauncherListCallback callback){
         mCallback = callback;
     }
 
     /**
      * 设置删除按钮是否可见
      */
-    public void setDeleteVisible(boolean deleteVisible) {
+    public void setDeleteVisible(boolean deleteVisible){
         mDeleteVisible = deleteVisible;
     }
 
-    public boolean ismDeleteVisible() {
+    public boolean ismDeleteVisible(){
         return mDeleteVisible;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == TYPE_HEADER) {
+        if(viewType == TYPE_HEADER){
             //找的头布局
             View headerView = inflater.inflate(R.layout.launcher_rv_header, parent, false);
             return new HeaderViewHolder(headerView);
@@ -62,60 +63,62 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position){
 
-        if (holder instanceof HeaderViewHolder) {
+        if(holder instanceof HeaderViewHolder){
             Log.d("MyAdapter", "onBindViewHolder---HeaderViewHolder--->" + holder);
             Log.d("MyAdapter", "onBindViewHolder---position--->" + position);
 
-        } else if (holder instanceof MyViewHolder) {
+        } else if(holder instanceof MyViewHolder){
+            int pos = holder.getAdapterPosition();
             Log.d("MyAdapter", "onBindViewHolder---MyViewHolder--->" + holder);
-            Log.d("MyAdapter", "onBindViewHolder---position--->" + position);
+            Log.d("MyAdapter", "onBindViewHolder---pos--->" + pos);
             Log.d("MyAdapter", "onBindViewHolder---data--->" + data.size());
             final MyViewHolder myViewHolder = (MyViewHolder) holder;
-            final AddAppListModel model = data.get(position - 1);
+            final AddAppListModel model = data.get(pos - 1);
             Log.d("MyAdapter", "onBindViewHolder---model--->" + model);
             myViewHolder.tv_title.setText(model.getCurrentAppName());
             myViewHolder.app_icon.setImageDrawable(model.getIcon());
 
-            int iconIndex = position % 6;
+            int iconIndex = pos % 6;
             Log.d("MyAdapter", "onBindViewHolder---第几张图--iconIndex->" + iconIndex);
             myViewHolder.itemView.setBackgroundResource(iconBgRes[iconIndex]);
 
             if(mDeleteVisible){
-                if(TextUtils.equals(model.getCurrentAppName(),"添加应用")
-                        || TextUtils.equals(model.getCurrentAppName(),"设置") ){
+                if(TextUtils.equals(model.getCurrentAppName(), "添加应用")
+                        || TextUtils.equals(model.getCurrentAppName(), "设置")){
                     myViewHolder.delete_item.setVisibility(View.INVISIBLE);
-                }else{
+                } else{
                     myViewHolder.delete_item.setVisibility(View.VISIBLE);
                 }
-            }else{
+            } else{
                 myViewHolder.delete_item.setVisibility(View.INVISIBLE);
             }
 
-            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
-                public void onClick(View view) {
-                    mCallback.onItemClick(position);
-                    Toast.makeText(view.getContext(), "item" + position + " 被点击了", Toast.LENGTH_SHORT).show();
-//                    myViewHolder.tv_title.setText("G " + position);
-//                    notifyItemChanged(position);
+                public void onClick(View view){
+                    mCallback.onItemClick(pos);
+                    Toast.makeText(view.getContext(), data.get(pos - 1).getCurrentAppName() + " 被点击了",
+                            Toast.LENGTH_SHORT).show();
+                    //                    myViewHolder.tv_title.setText("G " + pos);
+                    //                    notifyItemChanged(pos);
                 }
             });
-            myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
-                public boolean onLongClick(View view) {
+                public boolean onLongClick(View view){
                     mCallback.onItemLongClick();
-                    Toast.makeText(view.getContext(), "item" + position + " 长按了", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), data.get(pos - 1).getCurrentAppName() + " 长按了", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
-            myViewHolder.delete_item.setOnClickListener(new View.OnClickListener() {
+            myViewHolder.delete_item.setOnClickListener(new View.OnClickListener(){
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view){
                     mCallback.onDeleteClick();
-                    Toast.makeText(view.getContext(), "item" + position + " 删除了", Toast.LENGTH_SHORT).show();
-                    MyAdapter.this.data.remove(position - 1);
+                    Toast.makeText(view.getContext(), data.get(pos - 1).getCurrentAppName() + " 删除了", Toast.LENGTH_SHORT).show();
+                    MyAdapter.this.data.remove(pos - 1);
                     MyAdapter.this.notifyDataSetChanged();
                 }
             });
@@ -124,16 +127,16 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(int position){
         //在第一个位置添加头
-        if (position == 0) {
+        if(position == 0){
             return TYPE_HEADER;
         }
         return super.getItemViewType(position);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount(){
         return data.size() + 1;
     }
 
@@ -141,21 +144,21 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * 头布局的viewholder
      */
-    class HeaderViewHolder extends RecyclerView.ViewHolder {
+    class HeaderViewHolder extends RecyclerView.ViewHolder{
         RelativeLayout rv_header;
 
-        public HeaderViewHolder(View itemView) {
+        public HeaderViewHolder(View itemView){
             super(itemView);
             rv_header = (RelativeLayout) itemView.findViewById(R.id.rv_header);
         }
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder{
         TextView tv_title;
         ImageView app_icon;
         ImageView delete_item;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView){
             super(itemView);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             app_icon = (ImageView) itemView.findViewById(R.id.app_icon);

@@ -1,20 +1,18 @@
 package com.jade.testdemo;
 
-import android.os.UserHandle;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.graphics.drawable.Drawable;
-import android.content.Context;
+import android.util.Log;
 
 import com.jade.testdemo.util.AddAppListDB;
 
-public class AddAppListModel {
+import java.util.ArrayList;
 
-	private String currentPackage;
+public class AddAppListModel{
+
+    private String currentPackage;
     private String currentAppName;
     private String currentClassName;
     private int currentIsChecked;
@@ -28,15 +26,15 @@ public class AddAppListModel {
         ArrayList<AddAppListModel> addAppListModels = new ArrayList<>();
 
         Cursor c = null;
-        try {
-            c = mDb.getWritableDatabase().query(AddAppListDB.TABLE_NAME,null,null,null,null,null,null,null);
+        try{
+            c = mDb.query(null, null, null);
 
             final int columnPackage = c.getColumnIndex(AddAppListDB.COLUMN_PACKAGE);
             final int columnAppName = c.getColumnIndex(AddAppListDB.COLUMN_APP_NAME);
             final int columnClassName = c.getColumnIndex(AddAppListDB.COLUMN_CLASS_NAME);
             final int columnIsChecked = c.getColumnIndex(AddAppListDB.COLUMN_IS_CHECKED);
 
-            while (c.moveToNext()) {
+            while(c.moveToNext()){
                 AddAppListModel model = new AddAppListModel();
 
                 String currentPackage = c.getString(columnPackage);
@@ -56,11 +54,11 @@ public class AddAppListModel {
 
                 addAppListModels.add(model);
             }
-        } catch (SQLiteException e) {
-            Log.d("launcher692", "Error reading AddAppListDB: "+ e);
+        } catch(SQLiteException e){
+            Log.d("launcher692", "Error reading AddAppListDB: " + e);
             // Continue updating whatever we have read so far
-        } finally {
-            if (c != null) {
+        } finally{
+            if(c != null){
                 c.close();
             }
         }
@@ -70,50 +68,50 @@ public class AddAppListModel {
     }
 
 
-    public String getCurrentPackage() {
+    public String getCurrentPackage(){
         return currentPackage;
     }
 
-    public void setCurrentPackage(String currentPackage) {
+    public void setCurrentPackage(String currentPackage){
         this.currentPackage = currentPackage;
     }
 
-    public String getCurrentAppName() {
+    public String getCurrentAppName(){
         return currentAppName;
     }
 
-    public void setCurrentAppName(String currentAppName) {
+    public void setCurrentAppName(String currentAppName){
         this.currentAppName = currentAppName;
     }
 
-    public String getCurrentClassName() {
+    public String getCurrentClassName(){
         return currentClassName;
     }
 
-    public void setCurrentClassName(String currentClassName) {
+    public void setCurrentClassName(String currentClassName){
         this.currentClassName = currentClassName;
     }
 
 
-    public int getCurrentIsChecked() {
+    public int getCurrentIsChecked(){
         return currentIsChecked;
     }
 
-    public void setCurrentIsChecked(int currentIsChecked) {
+    public void setCurrentIsChecked(int currentIsChecked){
         this.currentIsChecked = currentIsChecked;
     }
 
-    public Drawable getIcon() {
+    public Drawable getIcon(){
         return icon;
     }
 
-    public void setIcon(Drawable icon) {
+    public void setIcon(Drawable icon){
         this.icon = icon;
     }
 
-   
+
     @Override
-    public String toString() {
+    public String toString(){
         return "AddAppListModel{" +
                 "currentPackage='" + currentPackage + '\'' +
                 ", currentAppName='" + currentAppName + '\'' +

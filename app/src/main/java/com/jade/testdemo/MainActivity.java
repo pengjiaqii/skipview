@@ -8,9 +8,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,15 +23,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.content.pm.LauncherApps;
 
 import com.jade.testdemo.util.AddAppListDB;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MainActivity extends Activity implements PagerGridLayoutManager.PageListener, RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends Activity implements PagerGridLayoutManager.PageListener, RadioGroup.OnCheckedChangeListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -57,7 +56,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
     private List<LauncherActivityInfo> mApps = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate");
@@ -75,7 +74,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         ReloadReceiver receiver = new ReloadReceiver();
         //实例化过滤器并设置要过滤的广播
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.android.launcher3j06.reload");
+        intentFilter.addAction("com.android.launcher692.reload");
         //注册广播
         this.registerReceiver(receiver, intentFilter);
 
@@ -100,25 +99,25 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
 
         // 使用原生的 Adapter 即可
         mAdapter = new MyAdapter();
-        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
             @Override
-            public void onChanged() {
+            public void onChanged(){
                 super.onChanged();
                 int count = mAdapter.getItemCount();
                 Log.d(TAG, "registerAdapterDataObserver count = " + count);
             }
         });
-        mAdapter.setItemCallback(new LauncherListCallback() {
+        mAdapter.setItemCallback(new LauncherListCallback(){
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(int position){
                 AddAppListModel model = mAdapter.data.get(position - 1);
                 Log.d(TAG, "点击 model = " + model.getCurrentPackage());
                 Log.d(TAG, "点击 model = " + model.getCurrentClassName());
-                if (TextUtils.equals(model.getCurrentPackage(), "com.test.addapp")) {
+                if(TextUtils.equals(model.getCurrentPackage(), "com.test.addapp")){
                     Intent intent = new Intent();
-                    intent.setClass(MainActivity.this,AppListActivity.class);
+                    intent.setClass(MainActivity.this, AppListActivity.class);
                     startActivity(intent);
-                } else {
+                } else{
                     ComponentName component = new ComponentName(model.getCurrentPackage(), model.getCurrentClassName());
                     Intent intent = new Intent();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -128,14 +127,14 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
             }
 
             @Override
-            public void onItemLongClick() {
+            public void onItemLongClick(){
                 //显示所有删除按钮
                 mAdapter.setDeleteVisible(true);
                 mAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onDeleteClick() {
+            public void onDeleteClick(){
 
             }
         });
@@ -145,34 +144,34 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
     }
 
 
-    private void getAllActivity() {
+    private void getAllActivity(){
         mLastDatas.clear();
         ArrayList<AddAppListModel> models = AddAppListModel.getAllAppFromDB(this);
         Log.d(TAG, "AppListActivity---initData---models:" + models.size());
 
         final List<UserHandle> profiles = mUserManager.getUserProfiles();
-        for (UserHandle user : profiles) {
+        for(UserHandle user : profiles){
             mApps = mLauncherApps.getActivityList(null, user);
-            for (LauncherActivityInfo app : mApps) {
+            for(LauncherActivityInfo app : mApps){
                 Log.d(TAG, "AppListActivity---initData---app.getLabel:" + app.getLabel());
                 Log.d(TAG, "AppListActivity---initData---app.getPackageName:" + app.getComponentName().getPackageName());
                 Log.d(TAG, "AppListActivity---initData---app.getClassName:" + app.getComponentName().getClassName());
             }
         }
 
-        for (AddAppListModel model : models) {
-            for (LauncherActivityInfo app : mApps) {
+        for(AddAppListModel model : models){
+            for(LauncherActivityInfo app : mApps){
                 String packageName = app.getComponentName().getPackageName();
-                if (TextUtils.equals(packageName + app.getComponentName().getClassName(), model.getCurrentPackage() + model.getCurrentClassName())) {
-                    if (!TextUtils.equals("com.test.addapp", packageName)) {
+                if(TextUtils.equals(packageName + app.getComponentName().getClassName(), model.getCurrentPackage() + model.getCurrentClassName())){
+                    if(!TextUtils.equals("com.test.addapp", packageName)){
                         Drawable appIcon = app.getIcon(DisplayMetrics.DENSITY_DEFAULT);
                         model.setIcon(appIcon);
                         Log.w(TAG, "AppListActivity---packageName---:" + packageName);
                         Log.w(TAG, "AppListActivity---model.getCurrentIsChecked():" + model.getCurrentIsChecked());
-                        if (model.getCurrentIsChecked() == 0) {
+                        if(model.getCurrentIsChecked() == 0){
                             //unchecked
                             //                            mLastDatas.add(model);
-                        } else {
+                        } else{
                             //checked
                             mLastDatas.add(model);
                         }
@@ -186,9 +185,9 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         //        mLastDatas = mLastDatas.stream().distinct().collect(Collectors.toList());
 
         mInitialData.clear();
-        for (AddAppListModel model : mLastDatas) {
+        for(AddAppListModel model : mLastDatas){
             Log.d(TAG, "AppListActivity---mLastDatas:model---" + model.toString());
-            if (model.getCurrentIsChecked() == 1) {
+            if(model.getCurrentIsChecked() == 1){
                 //is checked
                 mInitialData.add(model);
             }
@@ -200,30 +199,40 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         addAppListModel.setCurrentIsChecked(1);
         //================添加假应用==================//
         mLastDatas.add(addAppListModel);
+        //================换位置，让设置永远第一个==================//
+        for(int i = 0; i < mLastDatas.size(); i++){
+            if(TextUtils.equals("com.android.settings", mLastDatas.get(i).getCurrentPackage())){
+                Collections.swap(mLastDatas, i, 0);
+                break;
+            }
+        }
+        //================换位置，让设置永远第一个==================//
+
         mLastDatas.add(0, new AddAppListModel());
+
         mAdapter.data.clear();
         mAdapter.data.addAll(mLastDatas);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed(){
         //        super.onBackPressed();
-        if (mAdapter.ismDeleteVisible()) {
+        if(mAdapter.ismDeleteVisible()){
             mAdapter.setDeleteVisible(false);
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void onPageSizeChanged(int pageSize) {
+    public void onPageSizeChanged(int pageSize){
         mTotal = pageSize;
         Log.e("shay", "总页数 = " + pageSize);
         mPageTotal.setText("共 " + pageSize + " 页");
     }
 
     @Override
-    public void onPageSelect(int pageIndex) {
+    public void onPageSelect(int pageIndex){
         mCurrent = pageIndex;
         Log.e("shay", "选中页码 = " + pageIndex);
         mPageCurrent.setText("第 " + (pageIndex + 1) + " 页");
@@ -234,7 +243,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
      *
      * @param view
      */
-    public void addOne(View view) {
+    public void addOne(View view){
         List<AddAppListModel> data = new ArrayList<>();
 
         AddAppListModel model = new AddAppListModel();
@@ -250,8 +259,8 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
      *
      * @param view
      */
-    public void removeOne(View view) {
-        if (mAdapter.data.size() > 0) {
+    public void removeOne(View view){
+        if(mAdapter.data.size() > 0){
             mAdapter.data.remove(mAdapter.data.size() - 1);
             mAdapter.notifyDataSetChanged();
         }
@@ -262,7 +271,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
      *
      * @param view
      */
-    public void addMore(View view) {
+    public void addMore(View view){
         List<AddAppListModel> data = new ArrayList<>();
         //        for (int i = 1; i <= 5; i++) {
         //            data.add("加五个" + i);
@@ -276,8 +285,8 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
      *
      * @param view
      */
-    public void removeMore(View view) {
-        for (int i = 1; i <= 5; i++) {
+    public void removeMore(View view){
+        for(int i = 1; i <= 5; i++){
             mAdapter.data.remove(mAdapter.data.size() - i);
         }
         mAdapter.notifyDataSetChanged();
@@ -285,7 +294,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
 
     @SuppressLint("WrongConstant")
     @Override
-    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId){
         //        int type = -1;
         //        if (checkedId == R.id.type_horizontal) {
         //            type = mLayoutManager.setOrientationType(PagerGridLayoutManager.HORIZONTAL);
@@ -298,27 +307,27 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         //        Log.i("shay", "type == " + type);
     }
 
-    public void prePage(View view) {
+    public void prePage(View view){
         mLayoutManager.prePage();
     }
 
-    public void nextPage(View view) {
+    public void nextPage(View view){
         mLayoutManager.nextPage();
     }
 
-    public void smoothPrePage(View view) {
+    public void smoothPrePage(View view){
         mLayoutManager.smoothPrePage();
     }
 
-    public void smoothNextPage(View view) {
+    public void smoothNextPage(View view){
         mLayoutManager.smoothNextPage();
     }
 
-    public void firstPage(View view) {
+    public void firstPage(View view){
         mRecyclerView.smoothScrollToPosition(0);
     }
 
-    public void lastPage(View view) {
+    public void lastPage(View view){
         mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
     }
 
@@ -326,10 +335,10 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
     /**
      * insert all app data to DB
      */
-    private void initData() {
+    private void initData(){
         ArrayList<AddAppListModel> models = AddAppListModel.getAllAppFromDB(this);
         Log.d(TAG, "---initData---models:" + models.size());
-        if (models.size() != 0) {
+        if(models.size() != 0){
             //data has been stored,return
             Log.d(TAG, "---initData---models：已经有数据，避免重复写入破坏数据");
             return;
@@ -338,10 +347,10 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         AddAppListDB mDb = new AddAppListDB(this);
         Log.d(TAG, "--------initData---");
         final List<UserHandle> profiles = mUserManager.getUserProfiles();
-        for (UserHandle user : profiles) {
+        for(UserHandle user : profiles){
             List<LauncherActivityInfo> apps = mLauncherApps.getActivityList(null, user);
-            for (LauncherActivityInfo app : apps) {
-                if (TextUtils.equals("com.android.dialer", app.getComponentName().getPackageName()) | TextUtils.equals("com.sprd.logmanager", app.getComponentName().getPackageName()) | TextUtils.equals("com.android.messaging", app.getComponentName().getPackageName()) | TextUtils.equals("com.android.camera2", app.getComponentName().getPackageName()) | TextUtils.equals("com.sohu.inputmethod.sogou", app.getComponentName().getPackageName())) {
+            for(LauncherActivityInfo app : apps){
+                if(TextUtils.equals("com.android.dialer", app.getComponentName().getPackageName()) | TextUtils.equals("com.sprd.logmanager", app.getComponentName().getPackageName()) | TextUtils.equals("com.android.messaging", app.getComponentName().getPackageName()) | TextUtils.equals("com.android.camera2", app.getComponentName().getPackageName()) | TextUtils.equals("com.sohu.inputmethod.sogou", app.getComponentName().getPackageName())){
                     continue;
                 }
                 Log.d(TAG, "---initData---app.getPackageName:" + app.getComponentName().getPackageName());
@@ -352,24 +361,24 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                 values.put(AddAppListDB.COLUMN_APP_NAME, app.getLabel().toString());
                 values.put(AddAppListDB.COLUMN_CLASS_NAME, app.getComponentName().getClassName());
                 //0 means unchecked , 1 means checked。default unchecked
-                if (TextUtils.equals("com.test.addapp", app.getComponentName().getPackageName()) | TextUtils.equals("com.android.settings", app.getComponentName().getPackageName())) {
+                if(TextUtils.equals("com.test.addapp", app.getComponentName().getPackageName()) | TextUtils.equals("com.android.settings", app.getComponentName().getPackageName())){
                     values.put(AddAppListDB.COLUMN_IS_CHECKED, 1);
-                } else {
+                } else{
                     values.put(AddAppListDB.COLUMN_IS_CHECKED, 0);
                 }
 
                 // values.put(AddAppListDB.COLUMN_PACKAGE, key.componentName.getPackageName());
-//                mDb.insertOrReplace(values);
-                mDb.getWritableDatabase().insert(AddAppListDB.TABLE_NAME, null, values);
+                //                mDb.insertOrReplace(values);
+                mDb.insertOrReplace(values);
             }
         }
     }
 
 
-    public class ReloadReceiver extends BroadcastReceiver {
+    public class ReloadReceiver extends BroadcastReceiver{
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent){
             Log.d(TAG, "onReceive---" + intent.getAction());
             getAllActivity();
         }
