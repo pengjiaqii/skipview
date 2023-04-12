@@ -117,7 +117,6 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                 if (TextUtils.equals(model.getCurrentPackage(), "com.test.addapp")) {
                     Intent intent = new Intent();
                     intent.setClass(MainActivity.this,AppListActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 } else {
                     ComponentName component = new ComponentName(model.getCurrentPackage(), model.getCurrentClassName());
@@ -168,6 +167,8 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                     if (!TextUtils.equals("com.test.addapp", packageName)) {
                         Drawable appIcon = app.getIcon(DisplayMetrics.DENSITY_DEFAULT);
                         model.setIcon(appIcon);
+                        Log.w(TAG, "AppListActivity---packageName---:" + packageName);
+                        Log.w(TAG, "AppListActivity---model.getCurrentIsChecked():" + model.getCurrentIsChecked());
                         if (model.getCurrentIsChecked() == 0) {
                             //unchecked
                             //                            mLastDatas.add(model);
@@ -358,6 +359,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                 }
 
                 // values.put(AddAppListDB.COLUMN_PACKAGE, key.componentName.getPackageName());
+//                mDb.insertOrReplace(values);
                 mDb.getWritableDatabase().insert(AddAppListDB.TABLE_NAME, null, values);
             }
         }

@@ -25,7 +25,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="144px"
         android:background="@drawable/ic_hotseat_bg">
 
 
