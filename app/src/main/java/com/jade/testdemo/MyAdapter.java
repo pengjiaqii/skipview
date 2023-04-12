@@ -2,6 +2,7 @@ package com.jade.testdemo;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +83,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             myViewHolder.itemView.setBackgroundResource(iconBgRes[iconIndex]);
 
             if(mDeleteVisible){
-                myViewHolder.delete_item.setVisibility(View.VISIBLE);
+                if(TextUtils.equals(model.getCurrentAppName(),"添加应用")
+                        || TextUtils.equals(model.getCurrentAppName(),"设置") ){
+                    myViewHolder.delete_item.setVisibility(View.INVISIBLE);
+                }else{
+                    myViewHolder.delete_item.setVisibility(View.VISIBLE);
+                }
             }else{
                 myViewHolder.delete_item.setVisibility(View.INVISIBLE);
             }
