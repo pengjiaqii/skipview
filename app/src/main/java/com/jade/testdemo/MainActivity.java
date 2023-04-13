@@ -105,7 +105,6 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                 super.onChanged();
                 int count = mAdapter.getItemCount();
                 Log.d(TAG, "registerAdapterDataObserver count = " + count);
-                mLayoutManager.smoothScrollToPage(0);
             }
         });
         mAdapter.setItemCallback(new LauncherListCallback(){
@@ -214,6 +213,9 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         mAdapter.data.clear();
         mAdapter.data.addAll(mLastDatas);
         mAdapter.notifyDataSetChanged();
+
+        //一直设置为首屏，索引为0
+        mLayoutManager.smoothScrollToPage(0);
     }
 
     @Override

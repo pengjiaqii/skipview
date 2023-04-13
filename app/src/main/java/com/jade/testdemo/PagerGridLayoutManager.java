@@ -62,7 +62,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
     private int mMaxScrollY;                        // 最大允许滑动的高度
     private int mScrollState = SCROLL_STATE_IDLE;   // 滚动状态
 
-    private boolean mAllowContinuousScroll = true;  // 是否允许连续滚动
+    private boolean mAllowContinuousScroll = false;  // 是否允许连续滚动
 
     private RecyclerView mRecyclerView;
 
