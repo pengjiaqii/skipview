@@ -105,6 +105,7 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
                 super.onChanged();
                 int count = mAdapter.getItemCount();
                 Log.d(TAG, "registerAdapterDataObserver count = " + count);
+                mLayoutManager.smoothScrollToPage(0);
             }
         });
         mAdapter.setItemCallback(new LauncherListCallback(){

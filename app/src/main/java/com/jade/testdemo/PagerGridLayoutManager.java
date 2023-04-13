@@ -684,10 +684,8 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      * @param isScrolling 是否处于滚动状态
      */
     private void setPageIndex(int pageIndex, boolean isScrolling){
-        //永远保持停留在首屏
-        pageIndex = 0;
-
-        Log.d("shay", "setPageIndex = " + pageIndex + ":" + isScrolling);
+        Log.e("shay", "mLastPageIndex = " + mLastPageIndex);
+        Log.e("shay", "setPageIndex = " + pageIndex + ":" + isScrolling);
         if(pageIndex == mLastPageIndex)
             return;
         // 如果允许连续滚动，那么在滚动过程中就会更新页码记录
