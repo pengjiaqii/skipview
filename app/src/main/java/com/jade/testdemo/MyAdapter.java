@@ -3,6 +3,7 @@ package com.jade.testdemo;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jade.testdemo.util.LunarCalendar;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -68,6 +75,19 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         if(holder instanceof HeaderViewHolder){
             Log.d("MyAdapter", "onBindViewHolder---HeaderViewHolder--->" + holder);
             Log.d("MyAdapter", "onBindViewHolder---position--->" + position);
+            final Locale l = Locale.getDefault();
+            Date now = new Date();
+            ((HeaderViewHolder) holder).the_clock.setText(new SimpleDateFormat(DateFormat.getBestDateTimePattern(l, "Hm"), l).format(now));
+            ((HeaderViewHolder) holder).date.setText(new SimpleDateFormat(DateFormat.getBestDateTimePattern(l, "MMMdd EEEE"), l).format(now));
+
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int monthOfYear = calendar.get(Calendar.MONTH);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            LunarCalendar lunarCalendar = LunarCalendar.getInstance();
+            lunarCalendar.set(year + "年" + (monthOfYear + 1) + "月" + dayOfMonth + "日!");
+            ((HeaderViewHolder) holder).lunar_date.setText(String.format("%s年 %s月%s", lunarCalendar.getAnimalsYear(),
+                    lunarCalendar.getLunarMonth(), lunarCalendar.getLunarDate()));
 
         } else if(holder instanceof MyViewHolder){
             int pos = holder.getAdapterPosition();
@@ -147,9 +167,17 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     class HeaderViewHolder extends RecyclerView.ViewHolder{
         RelativeLayout rv_header;
 
+        TextView the_clock;
+        TextView date;
+        TextView lunar_date;
+
         public HeaderViewHolder(View itemView){
             super(itemView);
             rv_header = (RelativeLayout) itemView.findViewById(R.id.rv_header);
+
+            the_clock = (TextView) itemView.findViewById(R.id.the_clock);
+            date = (TextView) itemView.findViewById(R.id.date);
+            lunar_date = (TextView) itemView.findViewById(R.id.lunar_date);
         }
     }
 

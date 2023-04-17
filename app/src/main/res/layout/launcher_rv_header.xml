@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rv_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,5 +8,35 @@
     android:layout_marginEnd="1dp"
     android:layout_marginBottom="1dp"
     android:background="@drawable/ic_header_bg">
+
+    <TextView
+        android:id="@+id/the_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        tools:text="06:36" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/the_clock"
+        android:layout_marginStart="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        tools:text="4月17 星期一" />
+
+    <TextView
+        android:id="@+id/lunar_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date"
+        android:layout_marginStart="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        tools:text="兔年 二月廿二" />
 
 </RelativeLayout>
