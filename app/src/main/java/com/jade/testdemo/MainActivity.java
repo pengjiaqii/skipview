@@ -22,7 +22,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.jade.testdemo.util.AddAppListDB;
 
@@ -41,8 +40,6 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
     private MyAdapter mAdapter;
     private PagerGridLayoutManager mLayoutManager;
     //    private RadioGroup mRadioGroup;
-    private TextView mPageTotal;        // 总页数
-    private TextView mPageCurrent;      // 当前页数
 
     private int mTotal = 0;
     private int mCurrent = 0;
@@ -67,8 +64,6 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
         //        mRadioGroup = (RadioGroup) findViewById(R.id.orientation_type);
         //        mRadioGroup.setOnCheckedChangeListener(this);
 
-        mPageTotal = (TextView) findViewById(R.id.page_total);
-        mPageCurrent = (TextView) findViewById(R.id.page_current);
 
         //生成广播处理
         ReloadReceiver receiver = new ReloadReceiver();
@@ -231,14 +226,12 @@ public class MainActivity extends Activity implements PagerGridLayoutManager.Pag
     public void onPageSizeChanged(int pageSize){
         mTotal = pageSize;
         Log.e("shay", "总页数 = " + pageSize);
-        mPageTotal.setText("共 " + pageSize + " 页");
     }
 
     @Override
     public void onPageSelect(int pageIndex){
         mCurrent = pageIndex;
         Log.e("shay", "选中页码 = " + pageIndex);
-        mPageCurrent.setText("第 " + (pageIndex + 1) + " 页");
     }
 
     /**
